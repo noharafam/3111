@@ -1,0 +1,31 @@
+[1]import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+
+[2]df = pd.read_csv("/content/sales_data_sample.csv", encoding='latin')
+df
+
+[3]df.info()
+
+[4]df.isnull().sum()
+
+[5]X = df.iloc[:, [3,4]].values
+
+[6]ss = StandardScaler()
+X = ss.fit_transform(X)
+
+[7]ks = []
+wcss = []
+
+[8]for i in range(1,11):
+kmeans = KMeans(n_clusters=i, init="k-means++", random_state=21)
+kmeans.fit(X)
+ks.append(i)
+wcss.append(kmeans.inertia_)
+
+[9]plt.plot(ks, wcss)
+plt.title("Elbow method")
+plt.xlabel("K value")
+plt.ylabel("WCSS")
